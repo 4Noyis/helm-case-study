@@ -1,0 +1,44 @@
+#Wordpress ayarları
+wordpressUsername: admin
+wordpressPassword: admin123
+wordpresBlogName: "Helm Odev Blog"
+
+# Service
+service:
+  type: ClusterIP
+
+# Ingress ayarları
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hostname: wordpress.local
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+
+# MariaDB Ayarları
+mariadb:
+  auth:
+    rootPassword: rootpass123
+    database: wordpress
+    username: wordpress
+    password: wppass123
+
+# Kaynak limitleri
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+mariadb:
+  primary:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi

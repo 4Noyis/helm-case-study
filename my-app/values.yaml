@@ -1,0 +1,23 @@
+replicaCount: 2
+
+image:
+  repository: hello-app
+  tag: "v1"
+  pullPolicy: Never
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 3000
+  nodePort: 30080
+
+app:
+  message: "Merhaba Helm Chart"
+
+resources:
+  limits:
+    cpu: "200m"
+    memory: "128Mi"
+  requests:
+    cpu: "100m"
+    memory: "64Mi"
