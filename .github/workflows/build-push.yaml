@@ -13,18 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker
+      - name: Show runner info
         run: |
-          docker version
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Arch: $RUNNER_ARCH"
+          uname -a
           
-      - name: Build Docker image
+      - name: List files
         run: |
-          docker build -t 192.168.49.2:30500/wordpress:${{ github.sha }} -f hello-app/Dockerfile hello-app/
-          
-      - name: Push to Registry
-        run: |
-          docker push 192.168.49.2:30500/wordpress:${{ github.sha }}
-          
-      - name: Update image tag
-        run: |
-          echo "Image pushed: 192.168.49.2:30500/wordpress:${{ github.sha }}"
+          ls -la
+          echo "---"
+          ls -la hello-app/ || echo "hello-app not found"
