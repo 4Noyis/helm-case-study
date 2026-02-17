@@ -13,14 +13,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Show runner info
+      - name: Set up kubectl
         run: |
-          echo "Runner OS: $RUNNER_OS"
-          echo "Runner Arch: $RUNNER_ARCH"
-          uname -a
+          curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/arm64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      - name: Build with Kaniko
+        run: |
+          cat <<KANIKO_EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: kaniko-build-${{ github.sha }}
+            namespace: default
+          spec:
+            containers:
+            - name: kaniko
+              image: gcr.io/kaniko-project/executor:latest
+              args:
+              - "--dockerfile=hello-app/Dockerfile"
+              - "--context=git://github.com/4Noyis/helm-case-study.git#refs/heads/main"
+              - "--destination=registry.registry.svc.cluster.local:5000/hello-app:${{ github.sha }}"
+              - "--insecure"
+            restartPolicy: Never
+          KANIKO_EOF
           
-      - name: List files
+          # Wait for build to complete
+          kubectl wait --for=condition=Ready pod/kaniko-build-${{ github.sha }} --timeout=300s || true
+          kubectl logs kaniko-build-${{ github.sha }}
+          kubectl delete pod kaniko-build-${{ github.sha }}
+
+      - name: Verify image
         run: |
-          ls -la
-          echo "---"
-          ls -la hello-app/ || echo "hello-app not found"
+          echo "Image built: registry.registry.svc.cluster.local:5000/hello-app:${{ github.sha }}"
