@@ -1,18 +1,18 @@
 replicaCount: 2
 
 image:
-  repository: hello-app
-  tag: "v1"
-  pullPolicy: Never
+  repository: registry.registry.svc.cluster.local:5000/hello-app
+  tag: "latest"
+  pullPolicy: Always
 
 service:
   type: NodePort
   port: 80
   targetPort: 3000
-  nodePort: 30080
+  nodePort: 30090
 
 app:
-  message: "Merhaba Helm Chart"
+  message: "Hello from GitOps!"
 
 resources:
   limits:
