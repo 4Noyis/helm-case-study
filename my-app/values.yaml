@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: registry.registry.svc.cluster.local:5000/hello-app
-  tag: "latest"
+  tag: "test"
   pullPolicy: Always
 
 service:
