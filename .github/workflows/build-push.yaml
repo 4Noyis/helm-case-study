@@ -1,0 +1,30 @@
+name: Build and Push
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        run: |
+          docker version
+          
+      - name: Build Docker image
+        run: |
+          docker build -t 192.168.49.2:30500/wordpress:${{ github.sha }} -f hello-app/Dockerfile hello-app/
+          
+      - name: Push to Registry
+        run: |
+          docker push 192.168.49.2:30500/wordpress:${{ github.sha }}
+          
+      - name: Update image tag
+        run: |
+          echo "Image pushed: 192.168.49.2:30500/wordpress:${{ github.sha }}"
