@@ -13,7 +13,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello from GitOps Pipeline test v2")
+		fmt.Fprintf(w, "GitOps Pipeline test v3")
 	})
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
