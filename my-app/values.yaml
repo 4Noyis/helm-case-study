@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: 10.96.125.11:5000/hello-app
-  tag: "58ed0cc365a95d0054b3049745f4e670e09ef944"
+  tag: "06445e0bf16c141ca19ea8c0907275f43fb1ea54"
   pullPolicy: Always
 
 service:
